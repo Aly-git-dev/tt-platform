@@ -1,0 +1,49 @@
+<div class="layout">
+  <!-- Main -->
+  <main class="main">
+    <!-- Contenido -->
+    <section class="card">
+      <div class="card-header">
+        <h2>Pendientes de aprobación</h2>
+      </div>
+
+      <div *ngIf="loading" class="info-text">Cargando solicitudes...</div>
+      <div *ngIf="error" class="error-text">{{ error }}</div>
+      <div *ngIf="success" class="success-text">{{ success }}</div>
+
+      <div *ngIf="!loading && !pendingUsers.length && !error" class="info-text">
+        No hay solicitudes pendientes 🎉
+      </div>
+
+      <table class="users-table" *ngIf="pendingUsers.length">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Roles solicitados</th>
+            <th style="width: 180px;">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of pendingUsers">
+            <td>{{ u.fullName }}</td>
+            <td>{{ u.emailInst }}</td>
+            <td>
+              <span class="role-pill small" *ngFor="let r of u.roles">
+                {{ r }}
+              </span>
+            </td>
+            <td class="actions-cell">
+              <button type="button" class="btn-approve" (click)="approve(u)">
+                Aprobar
+              </button>
+              <button type="button" class="btn-reject" (click)="reject(u)">
+                Rechazar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
