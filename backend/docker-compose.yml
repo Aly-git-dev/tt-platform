@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: upiiz_db
+    environment:
+      POSTGRES_DB: upiiz_platform
+      POSTGRES_USER: upiiz
+      POSTGRES_PASSWORD: upiizpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U upiiz -d upiiz_platform"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: upiiz_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@upiiz.mx
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: upiiz_mailhog
+    ports:
+      - "65535:65535"  # UI
+      - "1025:1025"  # SMTP
+
+volumes:
+  db_data:
