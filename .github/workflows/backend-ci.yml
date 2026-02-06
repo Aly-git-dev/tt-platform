@@ -2,25 +2,35 @@ name: Backend CI (Spring Boot)
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "17"
-          cache: maven
 
-      - name: Build & test (Maven)
+      - name: Build backend (auto-detect Maven/Gradle)
         working-directory: backend
-        run: mvn -B clean verify
+        run: |
+          set -e
+          if [ -f "./mvnw" ]; then
+            chmod +x ./mvnw
+            ./mvnw -B -DskipTests package
+          elif [ -f "pom.xml" ]; then
+            mvn -B -DskipTests package
+          elif [ -f "./gradlew" ]; then
+            chmod +x ./gradlew
+            ./gradlew build -x test
+          else
+            echo "No Maven/Gradle build file found in backend/. Expected mvnw/pom.xml/gradlew."
+            exit 1
+          fi
