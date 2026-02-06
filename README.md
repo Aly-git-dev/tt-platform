@@ -10,6 +10,10 @@ una API REST robusta y una base de datos relacional.
 
 > Enfoque del proyecto: arquitectura limpia, separación de responsabilidades,
 buenas prácticas de desarrollo y un entorno reproducible con Docker.
+---
+
+![Backend CI](https://github.com/Aly-git-dev/tt-platform/actions/workflows/backend-ci.yml/badge.svg)
+![Frontend CI](https://github.com/Aly-git-dev/tt-platform/actions/workflows/frontend-ci.yml/badge.svg)
 
 ---
 
